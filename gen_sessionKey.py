@@ -5,7 +5,7 @@ from base64 import b64encode
 import requests
 from os.path import join as pjoin
 
-with open('config.json','r') as f:
+with open(pjoin('configuration', 'config.json'),'r') as f:
     config = json.load(f)
 
 enterprise_user = config['user_name']

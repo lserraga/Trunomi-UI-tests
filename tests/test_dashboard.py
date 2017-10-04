@@ -4,8 +4,12 @@ import json
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from test_data_types import send_sql_query
+from os.path import join as pjoin
 
-with open('config.json','r') as f:
+import os
+print (os.getcwd())
+
+with open(pjoin('configuration','config.json'),'r') as f:
     config = json.load(f)
 
 enterprise_id = config['enterprise_id']
@@ -26,7 +30,7 @@ class Dashboard(unittest.TestCase):
         # Wait 30 secs before raising exception of element not found
         driver.implicitly_wait(5)
 
-        with open("session_key",'r') as f:
+        with open(pjoin("tests","session_key"),'r') as f:
             session_key = f.read()
 
         driver.get("{}/portal/login".format(host_addr))

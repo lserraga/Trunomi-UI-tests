@@ -3,8 +3,9 @@ import unittest
 import json
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from os.path import join as pjoin
 
-with open('config.json','r') as f:
+with open(pjoin('configuration','config.json'),'r') as f:
     config = json.load(f)
 
 enterprise_user = config['user_name']

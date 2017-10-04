@@ -4,6 +4,7 @@ from selenium.webdriver.support.expected_conditions import \
     staleness_of
 from selenium import webdriver
 import json 
+from os.path import join as pjoin
 
 
 #### from http://www.obeythetestinggoat.com/how-to-get-selenium-to-wait-for-page-load-after-a-click.html
@@ -25,7 +26,7 @@ class MySeleniumTest(SomeFunctionalTestClass):
             # nice!
 
 
-with open('config.json','r') as f:
+with open(pjoin('configuration', 'config.json'),'r') as f:
     config = json.load(f)
 
 enterprise_user = config['user_name']
