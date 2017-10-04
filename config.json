@@ -2,7 +2,11 @@
   "user_name": "luiserra",
   "user_password": "ea3ba492-9e2f-4a3d-9210-082d5fc14a13",
   "enterprise_id": "11835970-a388-11e7-8cdf-d59779f6131d",
-  "crate_host":"",
+  "host_addr": "http://trunomi.local",
+  "crate_host": "",
+  "main_menu": ["Dashboard", "Transactions", "Data Subject Requests", "Data Model", "Sign Out"],
+  "submenu_1": ["Access", "Erase", "Rectification", "Object"],
+  "submenu_2": ["Data Types", "Contexts"],
   "language_form":[
     "en_US",
     "ca_ES",

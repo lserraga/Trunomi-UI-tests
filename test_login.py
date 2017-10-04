@@ -1,7 +1,8 @@
 from selenium import webdriver
 import unittest
-import time
-import json 
+import json
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 
 with open('config.json','r') as f:
     config = json.load(f)
@@ -9,6 +10,7 @@ with open('config.json','r') as f:
 enterprise_user = config['user_name']
 user_password = config['user_password']
 enterprise_id = config['enterprise_id']
+host_addr = config['host_addr']
 
 class LogIn(unittest.TestCase):
 
@@ -21,9 +23,9 @@ class LogIn(unittest.TestCase):
         """Test that user is redirected to login page if out of session"""
 
         driver = self.driver
-        driver.get("http://trunomi.local/portal")
-        time.sleep(1)
-        assert driver.current_url == "http://trunomi.local/portal/login"
+        driver.get("{}/portal".format(host_addr))
+        WebDriverWait(self.driver, 5) \
+            .until(expected_conditions.url_matches("{}/portal/login".format(host_addr)))
 
 
     def test_login(self):
@@ -33,7 +35,7 @@ class LogIn(unittest.TestCase):
 
         driver = self.driver
         # Navigate driver to trunomi portal
-        driver.get("http://trunomi.local/portal/login")
+        driver.get("{}/portal/login".format(host_addr))
         self.assertTrue("Enterprise Portal" in driver.title)
 
         # Insert username
@@ -50,7 +52,7 @@ class LogIn(unittest.TestCase):
         # Asserint that the log-in was proper
         welcome_text = driver.find_element_by_css_selector('header.main-header span.navy-cap').text
         self.assertEqual("welcome {}".format(enterprise_user), welcome_text.lower())
-        self.assertEqual(driver.current_url, "http://trunomi.local/portal/dashboard")
+        self.assertEqual(driver.current_url, "{}/portal/dashboard".format(host_addr))
 
         session_key = driver.execute_script("return sessionStorage.getItem('TRUNOMI_USE_TOKEN')")
         self.assertTrue(session_key.startswith('Bearer '))

@@ -1,13 +1,18 @@
 from selenium import webdriver
 import unittest
-import time
 import json
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 from test_data_types import send_sql_query
 
 with open('config.json','r') as f:
     config = json.load(f)
 
 enterprise_id = config['enterprise_id']
+host_addr = config['host_addr']
+menu_exp = config['main_menu']
+subm1_exp = config['submenu_1']
+subm2_exp = config['submenu_2']
 
 class Dashboard(unittest.TestCase):
 
@@ -24,11 +29,11 @@ class Dashboard(unittest.TestCase):
         with open("session_key",'r') as f:
             session_key = f.read()
 
-        driver.get("http://trunomi.local/portal/login")
+        driver.get("{}/portal/login".format(host_addr))
         script = "sessionStorage.setItem('TRUNOMI_USE_TOKEN','{}')".format(session_key)
         driver.execute_script(script)
         # Navigate driver to trunomi portal
-        driver.get("http://trunomi.local/portal/dashboard")
+        driver.get("{}/portal/dashboard".format(host_addr))
 
 
     def test_stats(self):
@@ -62,11 +67,6 @@ class Dashboard(unittest.TestCase):
     def test_menus(self):
         """Test all elements of the left menu are properly displayed"""
         driver = self.driver
-
-        menu_exp = ['Dashboard', 'Transactions', 'Data Subject Requests',
-            'Data Model', 'Sign Out']
-        subm1_exp = ['Access', 'Erase', 'Rectification', 'Object']
-        subm2_exp = ['Data Types', 'Contexts']
 
         def check_menu_displayed(menu, menu_exp):            
             for i in range (0,len(menu_exp)):
@@ -105,10 +105,10 @@ class Dashboard(unittest.TestCase):
         """Test that when having a session the portal redirects the
         user to the dashboard"""
         driver = self.driver
+        driver.get("{}/portal".format(host_addr))
+        WebDriverWait(self.driver, 5) \
+            .until(expected_conditions.url_matches("{}/portal/dashboard".format(host_addr)))
 
-        driver.get("http://trunomi.local/portal")
-        time.sleep(1)
-        self.assertEqual(driver.current_url, "http://trunomi.local/portal/dashboard")
 
         
 
