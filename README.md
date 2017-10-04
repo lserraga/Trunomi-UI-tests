@@ -9,7 +9,9 @@ Python version 3.x with pip.
 ## Running the tests
 1. Clone repo
 
-2. chmod +x run_tests.sh
+2. Modify configuration/config.json with your host, user_name, password
 
-3. run_tests.sh
+3. chmod +x run_tests.sh
+
+4. run_tests.sh
 
