@@ -4,8 +4,7 @@ import unittest
 import json
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-import random
-from random import randint
+from random import randint, choice
 
 with open('config.json', 'r') as f:
     config = json.load(f)
@@ -214,7 +213,7 @@ class DataTypes(unittest.TestCase):
         driver.get("{}/portal/data-model/data-type/add".format(host_addr))
 
 
-        options = [random.choice([True, False]) for x in range(4)]
+        options = [choice([True, False]) for x in range(4)]
         checkBoxes = driver.find_elements_by_css_selector('div.btn.toggle.btn-md')
         for i in range(1, len(checkBoxes)):
             if options[i-1]:

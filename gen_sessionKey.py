@@ -3,6 +3,7 @@ from selenium import webdriver
 import json 
 from base64 import b64encode
 import requests
+from os.path import join as pjoin
 
 with open('config.json','r') as f:
     config = json.load(f)
@@ -19,5 +20,5 @@ def get_basic_jwt():
     return auth_answ.headers['Www-Authenticate']
 
 if __name__ == "__main__":
-    with open("session_key",'w') as f:
+    with open(pjoin("tests", "session_key"),'w') as f:
         f.write(get_basic_jwt())

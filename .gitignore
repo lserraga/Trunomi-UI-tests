@@ -4,3 +4,4 @@ assets
 session_key
 *.html
 .idea
+.DS_Store
