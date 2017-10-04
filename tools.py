@@ -2,6 +2,8 @@ from contextlib import contextmanager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import \
     staleness_of
+from selenium import webdriver
+import json 
 
 
 #### from http://www.obeythetestinggoat.com/how-to-get-selenium-to-wait-for-page-load-after-a-click.html
@@ -23,41 +25,33 @@ class MySeleniumTest(SomeFunctionalTestClass):
             # nice!
 
 
-import {Config} from './config';
-import * as jwt from 'jsonwebtoken';
-import * as uuid from 'uuid';
+with open('config.json','r') as f:
+    config = json.load(f)
 
+enterprise_user = config['user_name']
+user_password = config['user_password']
+host_addr = config['host_addr']
 
-export async function createNewUserAndLogin(enterpriseId, username, password){
-    const createdAt = new Date().toISOString();
-    const res1 = await Config.Db.query(
-        'INSERT INTO users (created_at, username, password, enterprise_id) VALUES ($1, $2, $3, $4)',
-        [createdAt, username, password, enterpriseId]
-    );
+def login_driver():
 
-    return 'Bearer ' + jwt.sign({
-            sub: `${enterpriseId}::${username}`,
-            pol: `enterprise on behalf of customer`,
-            aud: ['Trunomi', enterpriseId, username],
-            iss: enterpriseId,
-            jti: uuid.v1()
-        },
-        Config.SigningKeys.privateKey,
-        {algorithm: 'RS512'}
-    );
-}
+        # Start driver
+        driver = webdriver.Chrome()
+        # Wait 30 secs before raising exception of element not found
+        driver.implicitly_wait(30)
 
-export async function createNewEnterpriseSession(enterpriseId){
-    const createdAt = new Date().toISOString();
+        # Navigate driver to trunomi portal
+        driver.get("{}/portal/login".format(host_addr))
+        assert "Enterprise Portal" in driver.title
 
-    return 'Bearer ' + jwt.sign({
-            sub: `${enterpriseId}`,
-            pol: `enterprise`,
-            aud: ['Trunomi', enterpriseId],
-            iss: enterpriseId,
-            jti: uuid.v1()
-        },
-        Config.SigningKeys.privateKey,
-        {algorithm: 'RS512'}
-    );
-}
+        # Insert username
+        user_box = driver.find_element_by_name("username")
+        user_box.clear()
+        user_box.send_keys(enterprise_user)
+
+        # Insert password and submit
+        pass_box = driver.find_element_by_name("password")
+        pass_box.clear()
+        pass_box.send_keys(user_password)
+        driver.find_element_by_name("login-submit").click()
+
+        return driver

@@ -56,8 +56,8 @@ class LogIn(unittest.TestCase):
 
         session_key = driver.execute_script("return sessionStorage.getItem('TRUNOMI_USE_TOKEN')")
         self.assertTrue(session_key.startswith('Bearer '))
-        with open("session_key",'w') as f:
-            f.write(session_key)
+        # with open("session_key",'w') as f:
+        #     f.write(session_key)
 
     @classmethod
     def tearDown(self):
